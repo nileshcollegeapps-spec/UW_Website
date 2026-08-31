@@ -1,0 +1,1530 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#06172d">
+    <meta name="description" content="Union Watch reports, videos, and a chronological publication timeline.">
+    <title>Union Watch</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%0A%20%20%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2214%22%20fill%3D%22%23082548%22%3E%3C%2Frect%3E%0A%20%20%3Cg%20fill%3D%22none%22%20stroke%3D%22%23d8aa35%22%20stroke-linecap%3D%22round%22%20stroke-width%3D%223%22%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%2210%22%20fill%3D%22%23d8aa35%22%3E%3C%2Fcircle%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%208v9M32%2047v9M8%2032h9M47%2032h9M15%2015l7%207M42%2042l7%207M49%2015l-7%207M22%2042l-7%207%22%3E%3C%2Fpath%3E%0A%20%20%3C%2Fg%3E%0A%3C%2Fsvg%3E%0A" type="image/svg+xml">
+    <style>
+:root {
+  --navy: #082548;
+  --deep-navy: #020c18;
+  --blue: #164f87;
+  --gold: #d8aa35;
+  --cream: #f7f5ee;
+  --white: #fffefa;
+  --line: rgba(8, 37, 72, 0.22);
+  --muted: rgba(8, 37, 72, 0.58);
+  --serif: Georgia, "Times New Roman", serif;
+  --sans: Arial, Helvetica, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--cream);
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  margin: 0;
+  overflow-x: hidden;
+  color: var(--navy);
+  background: var(--cream);
+  font-family: var(--sans);
+}
+
+button,
+input,
+textarea {
+  color: inherit;
+  font: inherit;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.sun-mark {
+  width: 36px;
+  height: 36px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+}
+
+.sun-mark circle {
+  fill: var(--gold);
+  stroke: var(--gold);
+}
+
+.sunrise {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+  color: #f6e8b5;
+  background: var(--deep-navy);
+  transition: background 1.45s cubic-bezier(.25, .7, .2, 1), color 1.1s ease, opacity .36s ease, visibility 0s linear .38s;
+}
+
+.sky-glow {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: radial-gradient(circle at 50% 58%, rgba(216, 170, 53, .3) 0, rgba(22, 79, 135, .2) 20%, rgba(2, 12, 24, 0) 55%);
+  transition: opacity 1.1s ease, transform 1.4s cubic-bezier(.25, .7, .2, 1);
+  transform: translateY(16vh) scale(.8);
+}
+
+.horizon {
+  position: absolute;
+  top: 58%;
+  right: 0;
+  left: 0;
+  height: 1px;
+  background: rgba(238, 196, 86, .5);
+  box-shadow: 0 -1px 36px rgba(216, 170, 53, .16);
+  transition: opacity .55s ease .75s, transform 1.2s ease;
+}
+
+.gate-lockup {
+  position: absolute;
+  top: 58%;
+  left: 50%;
+  z-index: 2;
+  width: 280px;
+  height: 210px;
+  transform: translate(-50%, -50%);
+  transition: top .92s cubic-bezier(.2, .76, .16, 1), transform .92s cubic-bezier(.2, .76, .16, 1);
+}
+
+.gate-sun {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: clamp(138px, 14vw, 184px);
+  height: clamp(138px, 14vw, 184px);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  color: #f0c75d;
+  background: transparent;
+  cursor: pointer;
+  filter: drop-shadow(0 0 35px rgba(216, 170, 53, .34));
+  transform: translate(-50%, -50%);
+  transition: top .92s cubic-bezier(.2, .76, .16, 1), width .92s cubic-bezier(.2, .76, .16, 1), height .92s cubic-bezier(.2, .76, .16, 1), transform .92s cubic-bezier(.2, .76, .16, 1), color .8s ease, filter .7s ease;
+}
+
+.gate-sun:hover {
+  filter: drop-shadow(0 0 52px rgba(216, 170, 53, .52));
+}
+
+.gate-sun:disabled {
+  opacity: 1;
+}
+
+.gate-sun .sun-mark {
+  width: 100%;
+  height: 100%;
+  stroke-width: .45;
+}
+
+.gate-wordmark {
+  position: absolute;
+  top: 32px;
+  left: 50%;
+  opacity: 0;
+  color: var(--navy);
+  font: 600 15px var(--serif);
+  letter-spacing: .045em;
+  white-space: nowrap;
+  transform: translateX(-50%);
+  transition: opacity .25s ease;
+}
+
+.gate-hint {
+  position: absolute;
+  top: calc(58% + 110px);
+  left: 50%;
+  margin: 0;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: .22em;
+  white-space: nowrap;
+  transform: translateX(-50%);
+  transition: opacity .2s ease;
+}
+
+.entrance-rising .sunrise,
+.entrance-docking .sunrise,
+.entrance-open .sunrise {
+  color: var(--navy);
+  background: linear-gradient(180deg, #dbe8f4 0%, #f2e8c9 57%, var(--cream) 100%);
+}
+
+.entrance-rising .sky-glow,
+.entrance-docking .sky-glow,
+.entrance-open .sky-glow {
+  opacity: 1;
+  transform: translateY(-12vh) scale(1.25);
+}
+
+.entrance-rising .horizon,
+.entrance-docking .horizon,
+.entrance-open .horizon {
+  opacity: 0;
+  transform: translateY(14vh);
+}
+
+.entrance-rising .gate-lockup {
+  top: 27%;
+}
+
+.entrance-rising .gate-sun {
+  width: clamp(108px, 10vw, 136px);
+  height: clamp(108px, 10vw, 136px);
+  color: var(--navy);
+  filter: drop-shadow(0 0 25px rgba(216, 170, 53, .18));
+}
+
+.entrance-docking .gate-lockup,
+.entrance-open .gate-lockup {
+  top: 10px;
+  transform: translate(-50%, 0);
+}
+
+.entrance-docking .gate-sun,
+.entrance-open .gate-sun {
+  top: 0;
+  width: 27px;
+  height: 27px;
+  color: var(--navy);
+  filter: none;
+  transform: translate(-50%, 0);
+}
+
+.entrance-docking .gate-wordmark,
+.entrance-open .gate-wordmark {
+  opacity: 1;
+  transition-delay: .48s;
+}
+
+.entrance-rising .gate-hint,
+.entrance-docking .gate-hint,
+.entrance-open .gate-hint {
+  opacity: 0;
+}
+
+.entrance-open .sunrise {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.site-shell {
+  min-height: 100vh;
+  opacity: 0;
+  background: var(--cream);
+  transition: opacity .3s ease;
+}
+
+.entrance-docking .site-shell,
+.entrance-open .site-shell {
+  opacity: 1;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  height: 126px;
+  padding: 0 clamp(22px, 4vw, 70px);
+  border-bottom: 1px solid var(--line);
+  background: rgba(247, 245, 238, .96);
+  backdrop-filter: blur(10px);
+}
+
+.main-brand {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  display: flex;
+  width: fit-content;
+  padding: 0;
+  border: 0;
+  align-items: center;
+  flex-direction: column;
+  gap: 3px;
+  background: transparent;
+  cursor: pointer;
+  transform: translateX(-50%);
+}
+
+.main-brand .sun-mark {
+  width: 27px;
+  height: 27px;
+}
+
+.main-brand span,
+.mini-brand span {
+  font: 600 15px var(--serif);
+  letter-spacing: .045em;
+  white-space: nowrap;
+}
+
+.primary-tabs {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  display: flex;
+  height: 44px;
+  align-items: stretch;
+  gap: clamp(25px, 4vw, 60px);
+  transform: translateX(-50%);
+}
+
+.primary-tabs button,
+.contact-tab {
+  position: relative;
+  padding: 0;
+  border: 0;
+  color: var(--muted);
+  background: transparent;
+  cursor: pointer;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .18em;
+}
+
+.primary-tabs button::after,
+.contact-tab::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: var(--gold);
+  content: "";
+  transform: scaleX(0);
+  transition: transform .2s ease;
+}
+
+.primary-tabs button:hover,
+.primary-tabs button.is-active,
+.contact-tab:hover,
+.contact-tab.is-active {
+  color: var(--navy);
+}
+
+.primary-tabs button.is-active::after,
+.contact-tab.is-active::after {
+  transform: scaleX(1);
+}
+
+.contact-tab {
+  position: absolute;
+  right: clamp(22px, 4vw, 70px);
+  bottom: 15px;
+}
+
+.main-content {
+  width: min(1240px, calc(100% - 64px));
+  min-height: calc(100vh - 194px);
+  margin: 0 auto;
+  opacity: 0;
+  transform: translateY(64px);
+}
+
+.entrance-open .main-content {
+  animation: content-release .72s cubic-bezier(.18, .72, .2, 1) .18s forwards;
+}
+
+@keyframes content-release {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.view {
+  animation: view-rise .48s cubic-bezier(.2, .7, .2, 1) both;
+}
+
+@keyframes view-rise {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.view-heading {
+  display: flex;
+  min-height: 230px;
+  padding: 74px 0 36px;
+  border-bottom: 1px solid var(--navy);
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.view-heading h1 {
+  margin: 0;
+  font: 500 clamp(58px, 8vw, 112px)/.85 var(--serif);
+  letter-spacing: -.065em;
+}
+
+.view-heading p {
+  margin: 0;
+  color: var(--muted);
+  font: 13px var(--serif);
+}
+
+.reports-grid {
+  display: grid;
+  padding: 36px 0 110px;
+  grid-template-columns: repeat(3, 1fr);
+  perspective: 1200px;
+}
+
+.content-card {
+  position: relative;
+  display: flex;
+  min-height: 345px;
+  padding: 25px 25px 24px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  flex-direction: column;
+  background: transparent;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: background .22s ease, box-shadow .22s ease, transform .22s ease;
+}
+
+.content-card:nth-child(3n + 1) {
+  border-left: 1px solid var(--line);
+}
+
+.content-card:nth-child(-n + 3) {
+  border-top: 1px solid var(--line);
+}
+
+.content-card:hover {
+  z-index: 2;
+  background: var(--white);
+  box-shadow: 0 18px 45px rgba(8, 37, 72, .1);
+  transform: translateY(-7px) rotateX(1.5deg);
+}
+
+.content-card.is-featured {
+  grid-column: span 2;
+}
+
+.card-topline {
+  display: flex;
+  color: var(--muted);
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: .16em;
+}
+
+.card-number {
+  position: absolute;
+  top: 55px;
+  right: 23px;
+  color: rgba(8, 37, 72, .09);
+  font: 500 54px var(--serif);
+}
+
+.content-card h2 {
+  max-width: 500px;
+  margin: 72px 0 0;
+  font: 500 clamp(27px, 3vw, 43px)/1.02 var(--serif);
+  letter-spacing: -.04em;
+}
+
+.content-card.is-featured h2 {
+  max-width: 680px;
+  font-size: clamp(38px, 4.4vw, 63px);
+}
+
+.content-card p {
+  margin: 20px 0 0;
+  color: var(--muted);
+  font: 14px var(--serif);
+}
+
+.card-open {
+  margin-top: auto;
+  padding-top: 30px;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: .16em;
+}
+
+.card-open b {
+  margin-left: 8px;
+  color: var(--gold);
+  font-size: 13px;
+}
+
+.entrance-open .content-card {
+  animation: tile-up .82s cubic-bezier(.2, .72, .2, 1) .28s both;
+}
+
+.entrance-open .content-card:nth-child(2) {
+  animation-delay: .4s;
+}
+
+.entrance-open .content-card:nth-child(3) {
+  animation-delay: .51s;
+}
+
+.entrance-open .content-card:nth-child(4) {
+  animation-delay: .62s;
+}
+
+@keyframes tile-up {
+  from {
+    opacity: 0;
+    transform: translateY(150px) rotateX(-7deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotateX(0);
+  }
+}
+
+.videos-grid {
+  display: grid;
+  padding: 40px 0 110px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 42px 32px;
+  perspective: 1200px;
+}
+
+.video-card {
+  border: 1px solid var(--line);
+  background: transparent;
+  cursor: pointer;
+  transition: background .22s ease, box-shadow .22s ease, transform .22s ease;
+}
+
+.video-card:hover {
+  background: var(--white);
+  box-shadow: 0 18px 45px rgba(8, 37, 72, .1);
+  transform: translateY(-7px) rotateX(1.5deg);
+}
+
+.video-empty {
+  display: grid;
+  border-bottom: 1px solid var(--line);
+  aspect-ratio: 16 / 9;
+  place-items: center;
+  background: rgba(8, 37, 72, .025);
+}
+
+.video-empty span,
+.detail-video {
+  color: var(--muted);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: .19em;
+}
+
+.video-copy {
+  padding: 24px 24px 28px;
+}
+
+.video-copy h2 {
+  margin: 36px 0 0;
+  font: 500 clamp(29px, 3.6vw, 48px)/1.02 var(--serif);
+  letter-spacing: -.04em;
+}
+
+.video-copy p {
+  margin: 18px 0 0;
+  color: var(--muted);
+  font: 14px var(--serif);
+}
+
+.timeline-panel {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+}
+
+.timeline-heading {
+  width: min(1240px, calc(100% - 64px));
+  margin: 0 auto;
+}
+
+.timeline-heading > div:first-child {
+  display: flex;
+  align-items: flex-end;
+  gap: 24px;
+}
+
+.timeline-heading p {
+  padding-bottom: 5px;
+  font: 700 8px var(--sans);
+  letter-spacing: .18em;
+}
+
+.timeline-controls {
+  display: flex;
+  gap: 7px;
+}
+
+.timeline-controls button {
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--line);
+  background: transparent;
+  cursor: pointer;
+  font-size: 17px;
+}
+
+.timeline-controls button:hover {
+  background: var(--white);
+}
+
+.timeline-viewport {
+  height: 520px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  cursor: grab;
+  touch-action: pan-y;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gold) transparent;
+}
+
+.timeline-viewport.is-dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.timeline-track {
+  position: relative;
+  display: flex;
+  width: max-content;
+  min-width: 100%;
+  height: 100%;
+  padding: 0 9vw;
+  gap: 72px;
+}
+
+.timeline-line {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  height: 1px;
+  background: var(--navy);
+}
+
+.timeline-item {
+  position: relative;
+  width: 260px;
+  height: 100%;
+  flex: 0 0 260px;
+}
+
+.timeline-dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  width: 11px;
+  height: 11px;
+  border: 2px solid var(--cream);
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 0 1px var(--navy);
+  transform: translate(-50%, -50%);
+}
+
+.timeline-item::after {
+  position: absolute;
+  left: 50%;
+  width: 1px;
+  height: 54px;
+  background: var(--line);
+  content: "";
+  transform: translateX(-50%);
+}
+
+.timeline-item.is-above::after {
+  top: calc(50% - 54px);
+}
+
+.timeline-item.is-below::after {
+  top: 50%;
+}
+
+.timeline-item > button {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  min-height: 152px;
+  padding: 17px 18px;
+  border: 1px solid var(--line);
+  background: var(--cream);
+  text-align: left;
+  cursor: pointer;
+  transition: background .2s ease, border-color .2s ease, transform .2s ease;
+}
+
+.timeline-item.is-above > button {
+  bottom: calc(50% + 54px);
+}
+
+.timeline-item.is-below > button {
+  top: calc(50% + 54px);
+}
+
+.timeline-item > button:hover {
+  border-color: var(--navy);
+  background: var(--white);
+  transform: translateY(-3px);
+}
+
+.timeline-item button > span,
+.timeline-item button > small {
+  color: var(--muted);
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: .13em;
+}
+
+.timeline-item button > small {
+  float: right;
+}
+
+.timeline-item h2 {
+  margin: 18px 0 0;
+  font: 500 22px/1.04 var(--serif);
+  letter-spacing: -.025em;
+}
+
+.timeline-item p {
+  margin: 13px 0 0;
+  color: var(--muted);
+  font: 12px var(--serif);
+}
+
+.contact-panel {
+  width: min(840px, 100%);
+  margin: 0 auto;
+  padding-bottom: 110px;
+}
+
+.contact-form {
+  display: grid;
+  padding-top: 44px;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+
+.contact-form label {
+  display: grid;
+  gap: 10px;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: .17em;
+}
+
+.contact-form label:last-of-type {
+  grid-column: 1 / -1;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 13px 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  outline: none;
+  resize: vertical;
+  font: 16px var(--serif);
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: var(--gold);
+}
+
+.contact-form button {
+  padding: 13px 18px;
+  border: 1px solid var(--navy);
+  grid-column: 1 / -1;
+  justify-self: start;
+  background: transparent;
+  cursor: pointer;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: .17em;
+}
+
+.contact-form button:hover {
+  color: white;
+  background: var(--navy);
+}
+
+.contact-form button span {
+  margin-left: 25px;
+  color: var(--gold);
+}
+
+.contact-success {
+  padding: 85px 0;
+  text-align: center;
+}
+
+.contact-success .sun-mark {
+  width: 50px;
+  height: 50px;
+}
+
+.contact-success h2 {
+  margin: 24px 0 0;
+  font: 500 44px var(--serif);
+}
+
+.contact-success p {
+  color: var(--muted);
+  font: 14px var(--serif);
+}
+
+.site-footer {
+  display: flex;
+  height: 68px;
+  padding: 0 clamp(22px, 4vw, 70px);
+  border-top: 1px solid var(--line);
+  align-items: center;
+  justify-content: space-between;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: .16em;
+}
+
+.site-footer .sun-mark {
+  width: 22px;
+  height: 22px;
+}
+
+.detail-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  overflow: hidden;
+  background: var(--cream);
+  animation: detail-up .5s cubic-bezier(.2, .75, .2, 1) both;
+}
+
+@keyframes detail-up {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.detail-header {
+  display: flex;
+  height: 72px;
+  padding: 0 clamp(20px, 4vw, 65px);
+  border-bottom: 1px solid var(--line);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mini-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mini-brand .sun-mark {
+  width: 28px;
+  height: 28px;
+}
+
+.detail-close {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: .17em;
+}
+
+.detail-close span {
+  margin-left: 13px;
+  font-size: 23px;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.detail-body {
+  width: min(1100px, calc(100% - 48px));
+  height: calc(100vh - 72px);
+  margin: 0 auto;
+  padding: 80px 0 120px;
+  overflow-y: auto;
+}
+
+.detail-meta {
+  display: flex;
+  color: var(--muted);
+  gap: 18px;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: .17em;
+}
+
+.detail-meta span + span {
+  padding-left: 18px;
+  border-left: 1px solid var(--line);
+}
+
+.detail-body h1 {
+  max-width: 930px;
+  margin: 34px 0 70px;
+  font: 500 clamp(52px, 7vw, 94px)/.94 var(--serif);
+  letter-spacing: -.06em;
+}
+
+.detail-report {
+  max-width: 700px;
+  padding: 50px 0;
+  border-top: 1px solid var(--navy);
+}
+
+.detail-report p {
+  margin: 0;
+  color: var(--muted);
+  font: 22px var(--serif);
+}
+
+.detail-video {
+  display: grid;
+  width: 100%;
+  border: 1px solid var(--line);
+  aspect-ratio: 16 / 9;
+  place-items: center;
+  background: rgba(8, 37, 72, .025);
+}
+
+@media (max-width: 800px) {
+  .gate-lockup {
+    top: 58%;
+    width: 220px;
+  }
+
+  .entrance-rising .gate-lockup {
+    top: 27%;
+  }
+
+  .entrance-docking .gate-lockup,
+  .entrance-open .gate-lockup {
+    top: 9px;
+  }
+
+  .site-header {
+    height: 124px;
+    padding-inline: 14px;
+  }
+
+  .main-brand {
+    top: 9px;
+  }
+
+  .contact-tab {
+    right: 14px;
+    bottom: 15px;
+  }
+
+  .primary-tabs {
+    height: 43px;
+    gap: clamp(18px, 7vw, 34px);
+  }
+
+  .main-content {
+    width: calc(100% - 28px);
+  }
+
+  .view-heading {
+    min-height: 175px;
+    padding: 52px 0 26px;
+  }
+
+  .view-heading h1 {
+    font-size: 62px;
+  }
+
+  .reports-grid,
+  .videos-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .reports-grid {
+    padding-top: 22px;
+  }
+
+  .content-card,
+  .content-card:nth-child(3n + 1),
+  .content-card:nth-child(-n + 3) {
+    min-height: 300px;
+    border: 1px solid var(--line);
+    border-top: 0;
+  }
+
+  .content-card:first-child {
+    border-top: 1px solid var(--line);
+  }
+
+  .content-card.is-featured {
+    grid-column: auto;
+  }
+
+  .content-card h2,
+  .content-card.is-featured h2 {
+    font-size: 36px;
+  }
+
+  .videos-grid {
+    padding-top: 24px;
+    gap: 24px;
+  }
+
+  .timeline-heading {
+    width: calc(100% - 28px);
+  }
+
+  .timeline-heading > div:first-child {
+    display: block;
+  }
+
+  .timeline-heading p {
+    margin-top: 15px;
+  }
+
+  .timeline-controls button {
+    width: 36px;
+    height: 36px;
+  }
+
+  .timeline-viewport {
+    height: 500px;
+  }
+
+  .timeline-track {
+    padding-inline: 32px;
+    gap: 36px;
+  }
+
+  .timeline-item {
+    width: 230px;
+    flex-basis: 230px;
+  }
+
+  .contact-form {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-form label,
+  .contact-form label:last-of-type,
+  .contact-form button {
+    grid-column: 1;
+  }
+
+  .detail-header {
+    height: 64px;
+    padding-inline: 16px;
+  }
+
+  .detail-body {
+    width: calc(100% - 32px);
+    height: calc(100vh - 64px);
+    padding: 54px 0 90px;
+  }
+
+  .detail-body h1 {
+    margin: 28px 0 48px;
+    font-size: 52px;
+  }
+
+  .detail-meta {
+    flex-wrap: wrap;
+    gap: 8px 12px;
+  }
+
+  .detail-meta span + span {
+    padding-left: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    transition-delay: 0s !important;
+  }
+}
+
+    </style>
+    <link rel="stylesheet" href="styles.css">
+    <script>window.__unionWatchExternalLoaded = false;</script>
+    <script src="app.js" defer onload="window.__unionWatchExternalLoaded = true"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        if (window.__unionWatchExternalLoaded) return;
+        (() => {
+          "use strict";
+        
+          const items = [
+            {
+              id: "release-time-ledger",
+              kind: "REPORT",
+              title: "The Release-Time Ledger: Who Pays for Union Work?",
+              date: "AUG 18, 2026",
+              number: "01"
+            },
+            {
+              id: "political-spending",
+              kind: "VIDEO",
+              title: "Following Union Political Spending",
+              date: "AUG 12, 2026",
+              number: "02"
+            },
+            {
+              id: "contract-clause",
+              kind: "REPORT",
+              title: "Inside the Contract Clause That Moves Public Money",
+              date: "AUG 05, 2026",
+              number: "03"
+            },
+            {
+              id: "membership-gap",
+              kind: "REPORT",
+              title: "The Growing Gap Between Membership and Influence",
+              date: "JUL 27, 2026",
+              number: "04"
+            },
+            {
+              id: "release-time-video",
+              kind: "VIDEO",
+              title: "How Public Payroll Release Time Works",
+              date: "JUL 19, 2026",
+              number: "05"
+            },
+            {
+              id: "dues-route",
+              kind: "REPORT",
+              title: "Where the Dues Went",
+              date: "JUL 08, 2026",
+              number: "06"
+            },
+            {
+              id: "bargaining-table",
+              kind: "VIDEO",
+              title: "Beyond the Bargaining Table",
+              date: "JUN 24, 2026",
+              number: "07"
+            }
+          ];
+        
+          const body = document.body;
+          const enterButton = document.querySelector("#enterButton");
+          const homeButton = document.querySelector("#homeButton");
+          const mainContent = document.querySelector("#mainContent");
+          const navigationButtons = [...document.querySelectorAll("[data-view]")];
+          const detailPanel = document.querySelector("#detailPanel");
+          const detailClose = document.querySelector("#detailClose");
+          const detailMeta = document.querySelector("#detailMeta");
+          const detailTitle = document.querySelector("#detailTitle");
+          const detailContent = document.querySelector("#detailContent");
+          const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+          let activeView = "reports";
+          let previousFocus = null;
+          let dragState = null;
+          let suppressTimelineClick = false;
+        
+          const sunMarkup = `
+            <svg class="sun-mark" viewBox="0 0 48 48" aria-hidden="true">
+              <circle cx="24" cy="24" r="8.5"></circle>
+              <path d="M24 3v7M24 38v7M3 24h7M38 24h7M9.2 9.2l5 5M33.8 33.8l5 5M38.8 9.2l-5 5M14.2 33.8l-5 5"></path>
+            </svg>`;
+        
+          function itemCard(item, index) {
+            return `
+              <article class="content-card${index === 0 ? " is-featured" : ""}" data-open-item="${item.id}" role="button" tabindex="0" aria-label="Open ${item.title}">
+                <div class="card-topline"><span>${item.kind}</span><span>${item.date}</span></div>
+                <span class="card-number">${item.number}</span>
+                <h2>${item.title}</h2>
+                <p>Placeholder</p>
+                <span class="card-open">OPEN <b>↗</b></span>
+              </article>`;
+          }
+        
+          function videoCard(item) {
+            return `
+              <article class="video-card" data-open-item="${item.id}" role="button" tabindex="0" aria-label="Open ${item.title}">
+                <div class="video-empty"><span>INSERT VIDEO HERE</span></div>
+                <div class="video-copy">
+                  <div class="card-topline"><span>VIDEO</span><span>${item.date}</span></div>
+                  <h2>${item.title}</h2>
+                  <p>Placeholder</p>
+                </div>
+              </article>`;
+          }
+        
+          function renderReports() {
+            const reports = items.filter((item) => item.kind === "REPORT");
+            mainContent.innerHTML = `
+              <section class="view" aria-labelledby="reportsHeading">
+                <header class="view-heading">
+                  <h1 id="reportsHeading">Reports</h1>
+                  <p>Placeholder</p>
+                </header>
+                <div class="reports-grid">${reports.map(itemCard).join("")}</div>
+              </section>`;
+          }
+        
+          function renderVideos() {
+            const videos = items.filter((item) => item.kind === "VIDEO");
+            mainContent.innerHTML = `
+              <section class="view" aria-labelledby="videosHeading">
+                <header class="view-heading">
+                  <h1 id="videosHeading">Videos</h1>
+                  <p>Placeholder</p>
+                </header>
+                <div class="videos-grid">${videos.map(videoCard).join("")}</div>
+              </section>`;
+          }
+        
+          function timelineItem(item, index) {
+            const position = index % 2 === 0 ? "is-above" : "is-below";
+            return `
+              <article class="timeline-item ${position}">
+                <span class="timeline-dot" aria-hidden="true"></span>
+                <button type="button" data-open-item="${item.id}">
+                  <span>${item.kind}</span><small>${item.date}</small>
+                  <h2>${item.title}</h2>
+                  <p>Placeholder</p>
+                </button>
+              </article>`;
+          }
+        
+          function renderTimeline() {
+            const chronological = [...items].reverse();
+            mainContent.innerHTML = `
+              <section class="view timeline-panel" aria-labelledby="timelineHeading">
+                <header class="view-heading timeline-heading">
+                  <div><h1 id="timelineHeading">Timeline</h1><p>DRAG LEFT OR RIGHT</p></div>
+                  <div class="timeline-controls">
+                    <button type="button" data-timeline-direction="left" aria-label="Move timeline left">←</button>
+                    <button type="button" data-timeline-direction="right" aria-label="Move timeline right">→</button>
+                  </div>
+                </header>
+                <div class="timeline-viewport" id="timelineViewport" tabindex="0" aria-label="Publication timeline">
+                  <div class="timeline-track">
+                    <span class="timeline-line" aria-hidden="true"></span>
+                    ${chronological.map(timelineItem).join("")}
+                  </div>
+                </div>
+              </section>`;
+        
+            const viewport = document.querySelector("#timelineViewport");
+            requestAnimationFrame(() => {
+              viewport.scrollLeft = viewport.scrollWidth;
+            });
+          }
+        
+          function renderContact() {
+            mainContent.innerHTML = `
+              <section class="view contact-panel" aria-labelledby="contactHeading">
+                <header class="view-heading">
+                  <h1 id="contactHeading">Contact</h1>
+                  <p>Placeholder</p>
+                </header>
+                <form class="contact-form" id="contactForm">
+                  <label>NAME<input name="name" type="text" autocomplete="name" placeholder="Placeholder" required></label>
+                  <label>EMAIL<input name="email" type="email" autocomplete="email" placeholder="Placeholder" required></label>
+                  <label>MESSAGE<textarea name="message" rows="6" placeholder="Placeholder" required></textarea></label>
+                  <button type="submit">SEND <span>→</span></button>
+                </form>
+              </section>`;
+          }
+        
+          function renderView(view) {
+            activeView = view;
+            navigationButtons.forEach((button) => {
+              const isActive = button.dataset.view === view;
+              button.classList.toggle("is-active", isActive);
+              button.setAttribute("aria-pressed", String(isActive));
+            });
+        
+            if (view === "reports") renderReports();
+            if (view === "videos") renderVideos();
+            if (view === "timeline") renderTimeline();
+            if (view === "contact") renderContact();
+          }
+        
+          function beginEntrance() {
+            if (!body.classList.contains("entrance-idle")) return;
+            enterButton.disabled = true;
+        
+            if (reduceMotion.matches) {
+              body.className = "entrance-open";
+              mainContent.focus({ preventScroll: true });
+              return;
+            }
+        
+            body.className = "entrance-rising";
+            window.setTimeout(() => {
+              body.className = "entrance-docking";
+              window.setTimeout(() => {
+                body.className = "entrance-open";
+                mainContent.focus({ preventScroll: true });
+              }, 920);
+            }, 1050);
+          }
+        
+          function openDetail(itemId, opener) {
+            const item = items.find((candidate) => candidate.id === itemId);
+            if (!item) return;
+            previousFocus = opener;
+            detailMeta.innerHTML = `<span>${item.kind}</span><span>${item.date}</span><span>${item.number}</span>`;
+            detailTitle.textContent = item.title;
+            detailContent.innerHTML = item.kind === "VIDEO"
+              ? `<div class="detail-video">INSERT VIDEO HERE</div>`
+              : `<article class="detail-report"><p>Placeholder</p></article>`;
+            detailPanel.hidden = false;
+            document.body.style.overflow = "hidden";
+            detailClose.focus();
+          }
+        
+          function closeDetail() {
+            detailPanel.hidden = true;
+            document.body.style.overflow = "";
+            if (previousFocus) previousFocus.focus();
+          }
+        
+          function handleMainClick(event) {
+            const directionButton = event.target.closest("[data-timeline-direction]");
+            if (directionButton) {
+              const viewport = document.querySelector("#timelineViewport");
+              const amount = directionButton.dataset.timelineDirection === "left" ? -360 : 360;
+              viewport.scrollBy({ left: amount, behavior: reduceMotion.matches ? "auto" : "smooth" });
+              return;
+            }
+        
+            const itemButton = event.target.closest("[data-open-item]");
+            if (itemButton && !suppressTimelineClick) {
+              openDetail(itemButton.dataset.openItem, itemButton);
+            }
+          }
+        
+          function handleMainKeydown(event) {
+            const itemButton = event.target.closest("[data-open-item]");
+            if (itemButton && (event.key === "Enter" || event.key === " ")) {
+              event.preventDefault();
+              openDetail(itemButton.dataset.openItem, itemButton);
+            }
+        
+            const viewport = event.target.closest("#timelineViewport");
+            if (viewport && (event.key === "ArrowLeft" || event.key === "ArrowRight")) {
+              event.preventDefault();
+              viewport.scrollBy({ left: event.key === "ArrowLeft" ? -280 : 280, behavior: reduceMotion.matches ? "auto" : "smooth" });
+            }
+          }
+        
+          function handlePointerDown(event) {
+            const viewport = event.target.closest("#timelineViewport");
+            if (!viewport) return;
+            dragState = {
+              viewport,
+              pointerId: event.pointerId,
+              startX: event.clientX,
+              scrollLeft: viewport.scrollLeft,
+              moved: false
+            };
+            viewport.setPointerCapture(event.pointerId);
+            viewport.classList.add("is-dragging");
+          }
+        
+          function handlePointerMove(event) {
+            if (!dragState || dragState.pointerId !== event.pointerId) return;
+            const distance = event.clientX - dragState.startX;
+            if (Math.abs(distance) > 5) dragState.moved = true;
+            dragState.viewport.scrollLeft = dragState.scrollLeft - distance;
+          }
+        
+          function handlePointerEnd(event) {
+            if (!dragState || dragState.pointerId !== event.pointerId) return;
+            const { viewport, moved, pointerId } = dragState;
+            if (viewport.hasPointerCapture(pointerId)) viewport.releasePointerCapture(pointerId);
+            viewport.classList.remove("is-dragging");
+            suppressTimelineClick = moved;
+            dragState = null;
+            window.setTimeout(() => {
+              suppressTimelineClick = false;
+            }, 0);
+          }
+        
+          function handleSubmit(event) {
+            if (!event.target.matches("#contactForm")) return;
+            event.preventDefault();
+            event.target.outerHTML = `
+              <div class="contact-success" role="status">
+                ${sunMarkup}
+                <h2>Message received.</h2>
+                <p>Placeholder</p>
+              </div>`;
+          }
+        
+          function handleDocumentKeydown(event) {
+            if (!detailPanel.hidden && event.key === "Escape") {
+              closeDetail();
+              return;
+            }
+        
+            if (!detailPanel.hidden && event.key === "Tab") {
+              const focusable = [...detailPanel.querySelectorAll("button, [href], input, textarea, [tabindex]:not([tabindex='-1'])")]
+                .filter((element) => !element.disabled && !element.hidden);
+              if (!focusable.length) return;
+              const first = focusable[0];
+              const last = focusable[focusable.length - 1];
+              if (event.shiftKey && document.activeElement === first) {
+                event.preventDefault();
+                last.focus();
+              } else if (!event.shiftKey && document.activeElement === last) {
+                event.preventDefault();
+                first.focus();
+              }
+            }
+          }
+        
+          enterButton.addEventListener("click", beginEntrance);
+          homeButton.addEventListener("click", () => {
+            renderView("reports");
+            window.scrollTo({ top: 0, behavior: reduceMotion.matches ? "auto" : "smooth" });
+          });
+          navigationButtons.forEach((button) => {
+            button.addEventListener("click", () => renderView(button.dataset.view));
+          });
+          mainContent.addEventListener("click", handleMainClick);
+          mainContent.addEventListener("keydown", handleMainKeydown);
+          mainContent.addEventListener("pointerdown", handlePointerDown);
+          mainContent.addEventListener("pointermove", handlePointerMove);
+          mainContent.addEventListener("pointerup", handlePointerEnd);
+          mainContent.addEventListener("pointercancel", handlePointerEnd);
+          mainContent.addEventListener("submit", handleSubmit);
+          detailClose.addEventListener("click", closeDetail);
+          document.addEventListener("keydown", handleDocumentKeydown);
+        
+          renderView(activeView);
+        })();
+        
+      });
+    </script>
+  </head>
+  <body class="entrance-idle">
+    <section class="sunrise" id="sunrise" aria-label="Enter Union Watch">
+      <div class="sky-glow" aria-hidden="true"></div>
+      <div class="horizon" aria-hidden="true"></div>
+      <div class="gate-lockup">
+        <button class="gate-sun" id="enterButton" type="button" aria-label="Enter Union Watch">
+          <svg class="sun-mark" viewBox="0 0 48 48" aria-hidden="true">
+            <circle cx="24" cy="24" r="8.5"></circle>
+            <path d="M24 3v7M24 38v7M3 24h7M38 24h7M9.2 9.2l5 5M33.8 33.8l5 5M38.8 9.2l-5 5M14.2 33.8l-5 5"></path>
+          </svg>
+        </button>
+        <span class="gate-wordmark">UNION WATCH</span>
+      </div>
+      <p class="gate-hint">CLICK THE SUN</p>
+    </section>
+
+    <div class="site-shell" id="siteShell">
+      <header class="site-header">
+        <button class="main-brand" id="homeButton" type="button" aria-label="Union Watch home">
+          <svg class="sun-mark" viewBox="0 0 48 48" aria-hidden="true">
+            <circle cx="24" cy="24" r="8.5"></circle>
+            <path d="M24 3v7M24 38v7M3 24h7M38 24h7M9.2 9.2l5 5M33.8 33.8l5 5M38.8 9.2l-5 5M14.2 33.8l-5 5"></path>
+          </svg>
+          <span>UNION WATCH</span>
+        </button>
+
+        <nav class="primary-tabs" aria-label="Primary navigation">
+          <button type="button" data-view="reports" aria-pressed="true">REPORTS</button>
+          <button type="button" data-view="videos" aria-pressed="false">VIDEOS</button>
+          <button type="button" data-view="timeline" aria-pressed="false">TIMELINE</button>
+        </nav>
+
+        <button class="contact-tab" type="button" data-view="contact" aria-pressed="false">CONTACT</button>
+      </header>
+
+      <main class="main-content" id="mainContent" tabindex="-1"></main>
+
+      <footer class="site-footer">
+        <svg class="sun-mark" viewBox="0 0 48 48" aria-hidden="true">
+          <circle cx="24" cy="24" r="8.5"></circle>
+          <path d="M24 3v7M24 38v7M3 24h7M38 24h7M9.2 9.2l5 5M33.8 33.8l5 5M38.8 9.2l-5 5M14.2 33.8l-5 5"></path>
+        </svg>
+        <span>UNION WATCH</span>
+        <span>2026</span>
+      </footer>
+    </div>
+
+    <section class="detail-panel" id="detailPanel" role="dialog" aria-modal="true" aria-labelledby="detailTitle" hidden>
+      <header class="detail-header">
+        <div class="mini-brand">
+          <svg class="sun-mark" viewBox="0 0 48 48" aria-hidden="true">
+            <circle cx="24" cy="24" r="8.5"></circle>
+            <path d="M24 3v7M24 38v7M3 24h7M38 24h7M9.2 9.2l5 5M33.8 33.8l5 5M38.8 9.2l-5 5M14.2 33.8l-5 5"></path>
+          </svg>
+          <span>UNION WATCH</span>
+        </div>
+        <button class="detail-close" id="detailClose" type="button">CLOSE <span aria-hidden="true">×</span></button>
+      </header>
+      <div class="detail-body">
+        <div class="detail-meta" id="detailMeta"></div>
+        <h1 id="detailTitle"></h1>
+        <div id="detailContent"></div>
+      </div>
+    </section>
+  </body>
+</html>
